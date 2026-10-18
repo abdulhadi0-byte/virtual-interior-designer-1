@@ -1184,6 +1184,181 @@
       border-top: 1px solid var(--sand);
     }
 
+    /* Profile Section Styles */
+    .profile-hero {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(246,242,236,0.95));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 38px 42px;
+      box-shadow: 0 12px 36px rgba(37, 24, 16, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      right: -10%;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(183,154,99,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .profile-avatar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .profile-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--caramel), var(--espresso));
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-family: var(--f-display);
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(37, 24, 16, 0.18);
+      border: 4px solid var(--white);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
+    }
+    .profile-meta h1 {
+      font-size: 34px;
+      color: var(--espresso);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .profile-role {
+      font-size: 15px;
+      color: var(--caramel);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      margin-bottom: 10px;
+    }
+    .profile-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .profile-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--cream);
+      border: 1px solid var(--sand);
+      color: var(--espresso);
+    }
+    .profile-badge.gold {
+      background: #fdf8eb;
+      border-color: #e5cb91;
+      color: #8c6922;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 28px;
+    }
+    .profile-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 8px 28px rgba(37, 24, 16, 0.04);
+      margin-bottom: 24px;
+    }
+    .profile-card h3 {
+      font-size: 22px;
+      color: var(--espresso);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .profile-stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .profile-stat-box {
+      background: var(--surface);
+      border: 1px solid var(--sand);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .profile-stat-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 24, 16, 0.06);
+    }
+    .profile-stat-num {
+      font-family: var(--f-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--caramel);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .profile-stat-label {
+      font-size: 12px;
+      color: #7d6b5e;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pref-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--cream);
+      gap: 16px;
+    }
+    .pref-item:last-child {
+      border-bottom: none;
+    }
+    .pref-info b {
+      display: block;
+      font-size: 14px;
+      color: var(--espresso);
+    }
+    .pref-info span {
+      font-size: 12px;
+      color: #7d6b5e;
+    }
+    .nav-profile-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--caramel);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      margin-right: 6px;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+
     /* Toast */
     .toast {
       position: fixed;
@@ -1227,6 +1402,20 @@
       .designer-layout,
       .comparison-demo {
         grid-template-columns: 1fr;
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .profile-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 24px;
       }
 
       .grid {
@@ -1273,6 +1462,10 @@
         grid-template-columns: 1fr;
       }
 
+      .profile-stats-row {
+        grid-template-columns: 1fr;
+      }
+
       .glass {
         padding: 32px 20px;
       }
@@ -1295,6 +1488,7 @@
         <button type="button" class="nav-link" id="nav-designer" onclick="navigateTo('designer')">Studio
           Redesign</button>
         <button type="button" class="nav-link" id="nav-gallery" onclick="navigateTo('gallery')">Gallery</button>
+        <button type="button" class="nav-link" id="nav-profile" onclick="navigateTo('profile')"><span class="nav-profile-badge" id="navAvatarInitials">AH</span>Profile</button>
       </nav>
 
       <!-- Discreet API Configuration Modal Trigger -->
@@ -1752,6 +1946,156 @@
       </section>
     </div>
 
+    <!-- VIEW 4: DESIGNER PROFILE PAGE -->
+    <div id="view-profile" style="display: none;">
+      <section class="wrap">
+        <div class="section-subtitle">Architectural Workspace & Studio Identity</div>
+        <h2>Designer Profile & Studio Preferences</h2>
+
+        <!-- Profile Hero Card -->
+        <div class="profile-hero">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="profileAvatarDisplay">AH</div>
+            <div class="profile-meta">
+              <h1 id="profileNameDisplay">Abdul Hadi</h1>
+              <div class="profile-role" id="profileRoleDisplay">Principal Architectural Interior Designer</div>
+              <div class="profile-badges">
+                <span class="profile-badge gold">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  Pro Studio Member
+                </span>
+                <span class="profile-badge" id="profileStudioDisplay">Studio Hadi • New York</span>
+                <span class="profile-badge" style="background:#e8f5e9; border-color:#c8e6c9; color:#2e7d32;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  Verified Architect
+                </span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn small" onclick="openEditProfileModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Edit Profile</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Metrics Row -->
+        <div class="profile-stats-row">
+          <div class="profile-stat-box">
+            <div class="profile-stat-num" id="statRedesignsCount">12</div>
+            <div class="profile-stat-label">Room Transformations</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="profile-stat-num" id="statSavedCount">2</div>
+            <div class="profile-stat-label">Saved Portfolios</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="profile-stat-num" id="statStyleFav">Warm Modern</div>
+            <div class="profile-stat-label">Signature Aesthetic</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="profile-stat-num" id="statEngineStatus" style="color:#2e7d32;">Ready</div>
+            <div class="profile-stat-label">AI Engine Status</div>
+          </div>
+        </div>
+
+        <!-- Two Column Detailed Preferences & Portfolio -->
+        <div class="profile-grid">
+          <!-- Left Column: Architectural Standards & Specifications -->
+          <div>
+            <div class="profile-card">
+              <h3>
+                <span>Architectural Preferences</span>
+                <button type="button" class="link" onclick="openEditProfileModal()" style="font-size:13px;">Modify</button>
+              </h3>
+
+              <div class="pref-item">
+                <div class="pref-info">
+                  <b>Signature Design Style</b>
+                  <span>Primary interior aesthetic applied to new briefs</span>
+                </div>
+                <div class="sample-pill" id="prefStyleBadge" style="margin:0;">Warm modern</div>
+              </div>
+
+              <div class="pref-item">
+                <div class="pref-info">
+                  <b>Lighting Color Temperature (CCT)</b>
+                  <span>Default architectural ambient illumination specification</span>
+                </div>
+                <div class="sample-pill" id="prefLightingBadge" style="margin:0;">2700K Warm Ambient</div>
+              </div>
+
+              <div class="pref-item">
+                <div class="pref-info">
+                  <b>Dimensional Measurement Standard</b>
+                  <span>Units used for millwork and spatial geometry sizing</span>
+                </div>
+                <div class="sample-pill" id="prefUnitsBadge" style="margin:0;">Metric (mm / meters)</div>
+              </div>
+
+              <div class="pref-item">
+                <div class="pref-info">
+                  <b>Material & Finish Palette Tendency</b>
+                  <span>Preferred tone story and tactile surface selections</span>
+                </div>
+                <div class="sample-pill" id="prefPaletteBadge" style="margin:0;">Cream & Warm Travertine</div>
+              </div>
+
+              <div class="pref-item">
+                <div class="pref-info">
+                  <b>Client Presentation Rendering Engine</b>
+                  <span>Photorealistic synthesis model pipeline</span>
+                </div>
+                <div class="sample-pill" style="margin:0; background:#fdf8eb; border-color:#e5cb91; color:#8c6922;">Flux Ultra Architecture</div>
+              </div>
+            </div>
+
+            <!-- Recent Portfolio Quick View -->
+            <div class="profile-card">
+              <h3>
+                <span>Recent Studio Portfolios</span>
+                <button type="button" class="link" onclick="navigateTo('gallery')" style="font-size:13px;">View All in Gallery →</button>
+              </h3>
+              <div id="profileRecentProjects" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Studio Information & Quick Controls -->
+          <div>
+            <div class="profile-card">
+              <h3>Studio Philosophy</h3>
+              <p id="profileBioDisplay" style="font-size:14px; color:#645347; line-height:1.7; margin-bottom:18px;">
+                Specializing in warm contemporary architecture, luxury residential curation, and seamless image-to-image AI interior space transformations.
+              </p>
+              <div style="font-size:13px; color:#8c7b6f; display:grid; gap:10px; border-top:1px solid var(--sand); padding-top:16px;">
+                <div>📍 <strong style="color:var(--espresso);">Location:</strong> <span id="profileLocationDisplay">New York, NY</span></div>
+                <div>✉️ <strong style="color:var(--espresso);">Email:</strong> <span id="profileEmailDisplay">contact@studiohadi.design</span></div>
+                <div>📐 <strong style="color:var(--espresso);">Experience:</strong> 8+ Years Luxury Residential</div>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <h3>Workspace & Controls</h3>
+              <div style="display:grid; gap:10px;">
+                <button type="button" class="btn ghost small" style="width:100%; justify-content:center;" onclick="openApiModal()">
+                  ⚙️ Configure AI Engine Key
+                </button>
+                <button type="button" class="btn ghost small" style="width:100%; justify-content:center;" onclick="exportProfileBackup()">
+                  💾 Export Profile & Portfolios (.json)
+                </button>
+                <button type="button" class="btn small" style="width:100%; justify-content:center;" onclick="navigateTo('designer')">
+                  ✨ Launch Studio Redesign
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
   </main>
 
   <!-- MODAL: SECURE API SETTINGS (Never shown on front page/dashboard) -->
@@ -1796,6 +2140,101 @@
           <button type="button" class="btn small" onclick="saveModalApiKey()">Save & Connect</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT DESIGNER PROFILE & STUDIO PREFERENCES -->
+  <div class="modal-overlay" id="editProfileModal" onclick="handleProfileModalOverlayClick(event)">
+    <div class="modal-card" style="max-width: 580px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <div>
+          <h3 style="font-size: 26px;">Edit Studio Profile</h3>
+          <p style="font-size: 13px; color: #645347;">Update your architectural identity and default preferences.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+
+      <form id="editProfileForm" onsubmit="saveUserProfile(event)" style="display: grid; gap: 16px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <label>
+            Full Name
+            <input type="text" id="inputProfName" required placeholder="e.g. Abdul Hadi" />
+          </label>
+          <label>
+            Studio / Firm Name
+            <input type="text" id="inputProfStudio" required placeholder="e.g. Studio Hadi Architecture" />
+          </label>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <label>
+            Professional Title
+            <input type="text" id="inputProfRole" required placeholder="e.g. Principal Interior Designer" />
+          </label>
+          <label>
+            Location
+            <input type="text" id="inputProfLocation" placeholder="e.g. New York, NY" />
+          </label>
+        </div>
+
+        <label>
+          Professional Email
+          <input type="email" id="inputProfEmail" placeholder="e.g. designer@studio.com" />
+        </label>
+
+        <label>
+          Studio Philosophy & Bio
+          <textarea id="inputProfBio" rows="3" placeholder="Briefly describe your design ethos and focus..."></textarea>
+        </label>
+
+        <div style="border-top: 1px solid var(--sand); padding-top: 14px; margin-top: 4px;">
+          <h4 style="font-size: 16px; margin-bottom: 12px; color: var(--espresso);">Default Studio Preferences</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <label>
+              Default Style
+              <select id="inputProfStyle">
+                <option value="Warm modern">Warm modern</option>
+                <option value="Minimalist Luxury">Minimalist Luxury</option>
+                <option value="Japandi">Japandi</option>
+                <option value="Scandinavian">Scandinavian</option>
+                <option value="Mid-Century Modern">Mid-Century Modern</option>
+                <option value="Industrial Chic">Industrial Chic</option>
+              </select>
+            </label>
+            <label>
+              Preferred Lighting
+              <select id="inputProfLighting">
+                <option value="2700K Warm Ambient">2700K Warm Ambient</option>
+                <option value="3000K Soft White">3000K Soft White</option>
+                <option value="4000K Natural Daylight">4000K Natural Daylight</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px;">
+            <label>
+              Measurement Units
+              <select id="inputProfUnits">
+                <option value="Metric (mm / meters)">Metric (mm / meters)</option>
+                <option value="Imperial (ft / inches)">Imperial (ft / inches)</option>
+              </select>
+            </label>
+            <label>
+              Signature Palette
+              <select id="inputProfPalette">
+                <option value="Cream & Warm Travertine">Cream & Warm Travertine</option>
+                <option value="Noir, Brass & Walnut">Noir, Brass & Walnut</option>
+                <option value="Sage, Oak & Linen">Sage, Oak & Linen</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 12px; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn ghost small" onclick="closeEditProfileModal()">Cancel</button>
+          <button type="submit" class="btn small">Save Profile Preferences</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -1902,6 +2341,8 @@
       document.getElementById('view-home').style.display = view === 'home' ? 'block' : 'none';
       document.getElementById('view-designer').style.display = view === 'designer' ? 'block' : 'none';
       document.getElementById('view-gallery').style.display = view === 'gallery' ? 'block' : 'none';
+      const profEl = document.getElementById('view-profile');
+      if (profEl) profEl.style.display = view === 'profile' ? 'block' : 'none';
 
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       const activeNav = document.getElementById('nav-' + view);
@@ -1911,6 +2352,8 @@
 
       if (view === 'gallery') {
         renderGalleryView();
+      } else if (view === 'profile') {
+        renderProfileView();
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2419,8 +2862,199 @@ Client Brief: ${comments}
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // ==========================================
+    // DESIGNER PROFILE MANAGEMENT
+    // ==========================================
+    const DEFAULT_PROFILE = {
+      name: 'Abdul Hadi',
+      role: 'Principal Architectural Interior Designer',
+      studio: 'Studio Hadi • New York',
+      location: 'New York, NY',
+      email: 'contact@studiohadi.design',
+      bio: 'Specializing in warm contemporary architecture, luxury residential curation, and seamless image-to-image AI interior space transformations.',
+      style: 'Warm modern',
+      lighting: '2700K Warm Ambient',
+      units: 'Metric (mm / meters)',
+      palette: 'Cream & Warm Travertine',
+      redesignsCount: 14
+    };
+
+    function getStoredProfile() {
+      try {
+        const data = localStorage.getItem('vid-user-profile');
+        if (!data) {
+          localStorage.setItem('vid-user-profile', JSON.stringify(DEFAULT_PROFILE));
+          return DEFAULT_PROFILE;
+        }
+        return { ...DEFAULT_PROFILE, ...JSON.parse(data) };
+      } catch (e) {
+        return DEFAULT_PROFILE;
+      }
+    }
+
+    function renderProfileView() {
+      const p = getStoredProfile();
+      const gallery = getStoredGallery();
+
+      // Initials calculation
+      const names = (p.name || 'AH').trim().split(' ');
+      const initials = names.length > 1 ? (names[0][0] + names[names.length - 1][0]).toUpperCase() : names[0].slice(0, 2).toUpperCase();
+
+      // Update avatar and badges in view
+      const avatarEl = document.getElementById('profileAvatarDisplay');
+      if (avatarEl) avatarEl.textContent = initials;
+      const navInitialsEl = document.getElementById('navAvatarInitials');
+      if (navInitialsEl) navInitialsEl.textContent = initials;
+
+      // Update text fields
+      const nameEl = document.getElementById('profileNameDisplay');
+      if (nameEl) nameEl.textContent = p.name;
+      const roleEl = document.getElementById('profileRoleDisplay');
+      if (roleEl) roleEl.textContent = p.role;
+      const studioEl = document.getElementById('profileStudioDisplay');
+      if (studioEl) studioEl.textContent = p.studio;
+      const bioEl = document.getElementById('profileBioDisplay');
+      if (bioEl) bioEl.textContent = p.bio;
+      const locEl = document.getElementById('profileLocationDisplay');
+      if (locEl) locEl.textContent = p.location;
+      const emailEl = document.getElementById('profileEmailDisplay');
+      if (emailEl) emailEl.textContent = p.email;
+
+      // Badges
+      const styleBadge = document.getElementById('prefStyleBadge');
+      if (styleBadge) styleBadge.textContent = p.style;
+      const lightBadge = document.getElementById('prefLightingBadge');
+      if (lightBadge) lightBadge.textContent = p.lighting;
+      const unitsBadge = document.getElementById('prefUnitsBadge');
+      if (unitsBadge) unitsBadge.textContent = p.units;
+      const palBadge = document.getElementById('prefPaletteBadge');
+      if (palBadge) palBadge.textContent = p.palette;
+
+      // Metrics
+      const totalRedesigns = (p.redesignsCount || 12) + (gallery.length > 2 ? gallery.length - 2 : 0);
+      const statRedesigns = document.getElementById('statRedesignsCount');
+      if (statRedesigns) statRedesigns.textContent = totalRedesigns;
+      const statSaved = document.getElementById('statSavedCount');
+      if (statSaved) statSaved.textContent = gallery.length;
+      const statFav = document.getElementById('statStyleFav');
+      if (statFav) statFav.textContent = p.style;
+
+      // Engine status
+      const provider = getSavedProvider();
+      const hasKey = !!getSavedApiKey(provider);
+      const statEngine = document.getElementById('statEngineStatus');
+      if (statEngine) {
+        statEngine.textContent = hasKey ? 'Pro ' + (provider === 'gemini' ? 'Gemini' : 'Groq') : 'Free Engine Active';
+        statEngine.style.color = hasKey ? '#2e7d32' : '#b79a63';
+      }
+
+      // Recent portfolio items (up to 2)
+      const recentCont = document.getElementById('profileRecentProjects');
+      if (recentCont) {
+        recentCont.innerHTML = '';
+        const recent = gallery.slice(0, 2);
+        if (recent.length === 0) {
+          recentCont.innerHTML = '<p style="grid-column: span 2; font-size:13px; color:#888;">No saved portfolios yet. Generate designs in the Studio to display here.</p>';
+        } else {
+          recent.forEach(item => {
+            const card = document.createElement('div');
+            card.style.borderRadius = '16px';
+            card.style.overflow = 'hidden';
+            card.style.border = '1px solid var(--sand)';
+            card.style.background = 'var(--surface)';
+            card.innerHTML = `
+              <div style="aspect-ratio: 16/10; overflow:hidden;">
+                <img src="${item.afterImg}" alt="${escapeHtml(item.title)}" style="width:100%; height:100%; object-fit:cover;" />
+              </div>
+              <div style="padding: 12px 14px;">
+                <b style="font-size:13px; display:block; color:var(--espresso);">${escapeHtml(item.title)}</b>
+                <span style="font-size:11.5px; color:#7d6b5e;">${new Date(item.date).toLocaleDateString()}</span>
+              </div>
+            `;
+            recentCont.appendChild(card);
+          });
+        }
+      }
+    }
+
+    function openEditProfileModal() {
+      const p = getStoredProfile();
+      document.getElementById('inputProfName').value = p.name || '';
+      document.getElementById('inputProfStudio').value = p.studio || '';
+      document.getElementById('inputProfRole').value = p.role || '';
+      document.getElementById('inputProfLocation').value = p.location || '';
+      document.getElementById('inputProfEmail').value = p.email || '';
+      document.getElementById('inputProfBio').value = p.bio || '';
+      document.getElementById('inputProfStyle').value = p.style || 'Warm modern';
+      document.getElementById('inputProfLighting').value = p.lighting || '2700K Warm Ambient';
+      document.getElementById('inputProfUnits').value = p.units || 'Metric (mm / meters)';
+      document.getElementById('inputProfPalette').value = p.palette || 'Cream & Warm Travertine';
+
+      document.getElementById('editProfileModal').style.display = 'flex';
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('editProfileModal').style.display = 'none';
+    }
+
+    function handleProfileModalOverlayClick(e) {
+      if (e.target.id === 'editProfileModal') {
+        closeEditProfileModal();
+      }
+    }
+
+    function saveUserProfile(e) {
+      if (e) e.preventDefault();
+      const current = getStoredProfile();
+      const updated = {
+        ...current,
+        name: document.getElementById('inputProfName').value.trim() || current.name,
+        studio: document.getElementById('inputProfStudio').value.trim() || current.studio,
+        role: document.getElementById('inputProfRole').value.trim() || current.role,
+        location: document.getElementById('inputProfLocation').value.trim() || current.location,
+        email: document.getElementById('inputProfEmail').value.trim() || current.email,
+        bio: document.getElementById('inputProfBio').value.trim() || current.bio,
+        style: document.getElementById('inputProfStyle').value,
+        lighting: document.getElementById('inputProfLighting').value,
+        units: document.getElementById('inputProfUnits').value,
+        palette: document.getElementById('inputProfPalette').value,
+      };
+
+      localStorage.setItem('vid-user-profile', JSON.stringify(updated));
+
+      // Also sync default studio style into designer form if present
+      const designerStyleSel = document.getElementById('roomStyleSelect');
+      if (designerStyleSel && updated.style) {
+        designerStyleSel.value = updated.style;
+      }
+
+      renderProfileView();
+      closeEditProfileModal();
+      showToast('Profile and studio preferences updated!');
+    }
+
+    function exportProfileBackup() {
+      const data = {
+        profile: getStoredProfile(),
+        gallery: getStoredGallery(),
+        exportDate: new Date().toISOString(),
+        version: '1.0'
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `interior-designer-profile-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Profile and portfolio backup downloaded');
+    }
+
     // Initialize state
     syncModalProvider();
+    renderProfileView();
 
     // Hash navigation
     window.addEventListener('DOMContentLoaded', () => {
@@ -2430,11 +3064,15 @@ Client Brief: ${comments}
         loadSampleRoom('warm-living');
       } else if (hash.includes('gallery')) {
         navigateTo('gallery');
+      } else if (hash.includes('profile')) {
+        navigateTo('profile');
       }
     });
     if (window.location.hash.includes('designer')) {
       navigateTo('designer');
       loadSampleRoom('warm-living');
+    } else if (window.location.hash.includes('profile')) {
+      navigateTo('profile');
     }
   </script>
 </body>

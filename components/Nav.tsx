@@ -7,7 +7,7 @@ export default function Nav() {
       <Link href="/" className="brand">Virtual Interior Designer</Link>
       <button className="burger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>Menu</button>
       <nav className={open ? 'links open' : 'links'} onClick={() => setOpen(false)}>
-        <Link href="/">Home</Link><Link href="/#rooms">Rooms</Link><Link href="/#systems">Systems</Link><Link href="/gallery">Gallery</Link>
+        <Link href="/">Home</Link><Link href="/#rooms">Rooms</Link><Link href="/#systems">Systems</Link><Link href="/gallery">Gallery</Link><Link href="/profile">Profile</Link>
         <Link href="/designer" className="btn small">Start designing</Link>
       </nav>
     </header>
