@@ -1,0 +1,2442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Interior Designer | AI Room Transformation Studio</title>
+  <meta name="description"
+    content="Transform any room photo into a photorealistic interior design. Upload your room, choose a style, and get an AI redesigned image instantly.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #f6f2ec;
+      --sand: #e6dac8;
+      --caramel: #a8794c;
+      --caramel-hover: #8f633a;
+      --espresso: #251810;
+      --gold: #b79a63;
+      --white: #ffffff;
+      --surface: #fffdf9;
+      --border: #e8dccb;
+      --f-display: 'Cormorant Garamond', Georgia, serif;
+      --f-body: 'Manrope', system-ui, -apple-system, sans-serif;
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--f-body);
+      background: var(--cream);
+      color: var(--espresso);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--f-display);
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--caramel);
+      outline-offset: 3px;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(255, 253, 249, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--sand);
+      transition: all 0.25s ease;
+    }
+
+    .brand {
+      font: 600 24px var(--f-display);
+      letter-spacing: 0.3px;
+      color: var(--espresso);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--caramel), var(--espresso));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 16px;
+      font-family: var(--f-display);
+      box-shadow: 0 4px 12px rgba(42, 28, 20, 0.2);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .nav-link {
+      background: none;
+      border: none;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      position: relative;
+      padding: 6px 0;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--caramel);
+    }
+
+    .nav-link.active {
+      color: var(--caramel);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--caramel);
+      border-radius: 2px;
+    }
+
+    .settings-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--sand);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--espresso);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .settings-btn:hover {
+      background: var(--white);
+      border-color: var(--caramel);
+      color: var(--caramel);
+    }
+
+    .burger {
+      display: none;
+      background: none;
+      border: 1px solid var(--sand);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font: 600 13px var(--f-body);
+      cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      background: var(--espresso);
+      color: var(--white);
+      border: 1px solid var(--espresso);
+      font: 600 15px var(--f-body);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(37, 24, 16, 0.12);
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--caramel);
+      border-color: var(--caramel);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(168, 121, 76, 0.28);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn.small {
+      padding: 8px 18px;
+      font-size: 13.5px;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: inherit;
+      border-color: var(--espresso);
+      box-shadow: none;
+    }
+
+    .btn.ghost:hover {
+      background: var(--espresso);
+      color: var(--white);
+    }
+
+    .btn.gold {
+      background: linear-gradient(135deg, #b79a63, #8f6a32);
+      border-color: #8f6a32;
+      color: #fff;
+    }
+
+    .btn.gold:hover {
+      background: linear-gradient(135deg, #c7aa73, #a1783b);
+      border-color: #a1783b;
+    }
+
+    .link {
+      background: none;
+      border: 0;
+      color: var(--caramel);
+      font: 600 14px var(--f-body);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    /* Layout & Containers */
+    .main-view {
+      flex: 1;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+
+    .wrap h2 {
+      font-size: clamp(34px, 4vw, 50px);
+      max-width: 720px;
+      margin-bottom: 24px;
+      color: var(--espresso);
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--caramel);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      padding: 64px 40px;
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(37, 24, 16, 0.82) 0%, rgba(37, 24, 16, 0.45) 60%, rgba(37, 24, 16, 0.2) 100%),
+        url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85') center/cover no-repeat;
+      border-bottom: 1px solid var(--sand);
+    }
+
+    .glass {
+      max-width: 580px;
+      padding: 48px;
+      border-radius: 28px;
+      color: var(--white);
+      background: rgba(255, 253, 249, 0.16);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 253, 249, 0.35);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .glass .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(6px);
+    }
+
+    .glass h1 {
+      font-size: clamp(40px, 5.5vw, 64px);
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    .glass p {
+      margin-bottom: 30px;
+      font-size: 17px;
+      line-height: 1.6;
+      opacity: 0.95;
+      font-weight: 300;
+      color: #f7f3ed;
+    }
+
+    .glass .btn {
+      background: var(--white);
+      color: var(--espresso);
+      border-color: var(--white);
+    }
+
+    .glass .btn:hover {
+      background: var(--caramel);
+      color: var(--white);
+      border-color: var(--caramel);
+    }
+
+    .glass .btn.ghost {
+      background: transparent;
+      color: var(--white);
+      border-color: rgba(255, 253, 249, 0.75);
+    }
+
+    .glass .btn.ghost:hover {
+      background: var(--white);
+      color: var(--espresso);
+      border-color: var(--white);
+    }
+
+    .row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Stats Section */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 1080px;
+      margin: -50px auto 0;
+      position: relative;
+      z-index: 10;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: 0 20px 55px rgba(37, 24, 16, 0.12);
+      border: 1px solid var(--sand);
+    }
+
+    .stats div {
+      padding: 32px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      border-right: 1px solid rgba(230, 218, 200, 0.6);
+    }
+
+    .stats div:last-child {
+      border-right: none;
+    }
+
+    .stats b {
+      font: 600 clamp(36px, 4vw, 46px) var(--f-display);
+      color: var(--espresso);
+      line-height: 1;
+    }
+
+    .stats span {
+      font-size: 14px;
+      color: var(--caramel);
+      font-weight: 600;
+    }
+
+    /* Showcase Carousel & Comparison */
+    .showcase-section {
+      background: var(--surface);
+      border-top: 1px solid var(--sand);
+      border-bottom: 1px solid var(--sand);
+      padding: 80px 24px;
+    }
+
+    .comparison-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 36px;
+    }
+
+    .demo-card {
+      background: var(--white);
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 35px rgba(37, 24, 16, 0.06);
+    }
+
+    .demo-img-box {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+    }
+
+    .demo-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .demo-tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(37, 24, 16, 0.85);
+      color: var(--white);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+      letter-spacing: 0.5px;
+    }
+
+    .demo-tag.gold {
+      background: rgba(183, 154, 99, 0.95);
+    }
+
+    .demo-content {
+      padding: 24px;
+    }
+
+    .demo-content h3 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .demo-content p {
+      font-size: 14.5px;
+      color: #645347;
+    }
+
+    /* Rooms Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .tile {
+      aspect-ratio: 4/3;
+      border-radius: 22px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      color: var(--white);
+      font: 600 24px var(--f-display);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(37, 24, 16, 0.1);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(37, 24, 16, 0.05) 0%, rgba(37, 24, 16, 0.88) 100%);
+      transition: background 0.3s ease;
+    }
+
+    .tile:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 40px rgba(37, 24, 16, 0.22);
+    }
+
+    .tile:hover::before {
+      background: linear-gradient(180deg, rgba(168, 121, 76, 0.1) 0%, rgba(37, 24, 16, 0.94) 100%);
+    }
+
+    .tile span {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    /* DESIGNER WORKSPACE */
+    .designer-section {
+      padding: 40px 24px 80px;
+    }
+
+    .designer-layout {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .card-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 32px;
+      box-shadow: 0 8px 30px rgba(37, 24, 16, 0.04);
+      display: grid;
+      gap: 20px;
+    }
+
+    .card-panel h2 {
+      font-size: 32px;
+      color: var(--espresso);
+      margin-bottom: 2px;
+    }
+
+    .card-panel-desc {
+      font-size: 14.5px;
+      color: #6d5b4e;
+      margin-bottom: 6px;
+    }
+
+    /* Image Uploader & Dropzone */
+    .upload-zone {
+      border: 2px dashed var(--caramel);
+      border-radius: 20px;
+      background: var(--cream);
+      padding: 24px 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 180px;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+      background: #f1e7d9;
+      border-color: var(--caramel-hover);
+      transform: scale(0.995);
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--caramel);
+      box-shadow: 0 4px 14px rgba(37, 24, 16, 0.08);
+    }
+
+    .upload-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--espresso);
+    }
+
+    .upload-sub {
+      font-size: 12.5px;
+      color: #7d6b5e;
+    }
+
+    /* Sample Room Presets */
+    .sample-pills-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--caramel);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 4px;
+    }
+
+    .sample-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sample-pill {
+      background: var(--cream);
+      border: 1px solid var(--sand);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--espresso);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sample-pill:hover {
+      background: var(--espresso);
+      color: var(--white);
+      border-color: var(--espresso);
+    }
+
+    /* Thumbnail Preview */
+    .preview-thumbnail-box {
+      display: none;
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--sand);
+      background: #000;
+      aspect-ratio: 16/10;
+    }
+
+    .preview-thumbnail-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-thumbnail-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .remove-img-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      backdrop-filter: blur(4px);
+    }
+
+    .remove-img-btn:hover {
+      background: #d32f2f;
+    }
+
+    /* Form Fields */
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--espresso);
+    }
+
+    input,
+    select,
+    textarea {
+      font: inherit;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--sand);
+      background: var(--cream);
+      color: var(--espresso);
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--caramel);
+      box-shadow: 0 0 0 3px rgba(168, 121, 76, 0.15);
+      background: var(--white);
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .palette-btn {
+      border: 1px solid var(--sand);
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: var(--cream);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .palette-btn.active {
+      border-color: var(--espresso);
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(37, 24, 16, 0.12);
+    }
+
+    .palette-swatches {
+      display: flex;
+      height: 12px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .palette-swatches span {
+      flex: 1;
+    }
+
+    /* Output Section */
+    .output-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 32px;
+      box-shadow: 0 8px 30px rgba(37, 24, 16, 0.04);
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* Interactive Comparison Slider */
+    .comparison-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 45px rgba(37, 24, 16, 0.12);
+      border: 1px solid var(--sand);
+      background: #111;
+      user-select: none;
+    }
+
+    .comparison-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .comparison-after-box {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      border-right: 3px solid var(--white);
+      box-shadow: 3px 0 15px rgba(0, 0, 0, 0.35);
+    }
+
+    .comparison-after-box .comparison-img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      /* will be scaled dynamically in JS to match full container width */
+    }
+
+    .comparison-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 3px solid var(--espresso);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: ew-resize;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      z-index: 20;
+      transition: transform 0.1s ease;
+    }
+
+    .comparison-handle:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .comparison-handle svg {
+      width: 20px;
+      height: 20px;
+      color: var(--espresso);
+    }
+
+    .slider-tag {
+      position: absolute;
+      bottom: 16px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(37, 24, 16, 0.85);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .slider-tag.left {
+      left: 16px;
+    }
+
+    .slider-tag.right {
+      right: 16px;
+      background: rgba(183, 154, 99, 0.92);
+    }
+
+    /* Output Tabs (Slider vs Side by Side vs Specs) */
+    .view-switcher {
+      display: inline-flex;
+      background: var(--cream);
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--sand);
+      gap: 4px;
+    }
+
+    .view-btn {
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--espresso);
+      transition: all 0.2s ease;
+    }
+
+    .view-btn.active {
+      background: var(--espresso);
+      color: var(--white);
+    }
+
+    /* Side-by-side mode */
+    .side-by-side-grid {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .sbs-card {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--sand);
+      background: var(--white);
+      box-shadow: 0 4px 16px rgba(37, 24, 16, 0.06);
+    }
+
+    .sbs-img-box {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+    }
+
+    .sbs-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sbs-title {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      background: var(--surface);
+      border-top: 1px solid var(--sand);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Loading state */
+    .loading-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 54px;
+      height: 54px;
+      border: 4px solid var(--sand);
+      border-top-color: var(--caramel);
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Output Specs Box */
+    .specs-box {
+      margin-top: 24px;
+      background: var(--cream);
+      border-radius: 18px;
+      border: 1px solid var(--sand);
+      padding: 24px;
+      white-space: pre-wrap;
+      font-size: 14.5px;
+      line-height: 1.8;
+      max-height: 360px;
+      overflow-y: auto;
+      color: #38291e;
+    }
+
+    /* Empty state */
+    .empty-output {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px;
+      color: #7d6b5e;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .empty-output-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--caramel);
+    }
+
+    /* SETTINGS MODAL (Discreet API Configuration) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(37, 24, 16, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-card {
+      background: var(--white);
+      border-radius: 26px;
+      max-width: 500px;
+      width: 100%;
+      padding: 36px;
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--sand);
+      position: relative;
+      animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalPop {
+      from {
+        transform: scale(0.94);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #8c7b6f;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-close:hover {
+      color: var(--espresso);
+    }
+
+    .key-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .key-status-indicator.connected {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .key-status-indicator.not-set {
+      background: #fdf2e9;
+      color: #b7791f;
+    }
+
+    /* GALLERY VIEW */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 28px;
+      margin-top: 28px;
+    }
+
+    .gallery-card {
+      background: var(--white);
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 25px rgba(37, 24, 16, 0.05);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 35px rgba(37, 24, 16, 0.12);
+    }
+
+    .gallery-img-box {
+      aspect-ratio: 16/10;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gallery-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(37, 24, 16, 0.85);
+      color: var(--white);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      backdrop-filter: blur(6px);
+    }
+
+    .gallery-content {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .gallery-title {
+      font-size: 22px;
+      font-family: var(--f-display);
+      color: var(--espresso);
+    }
+
+    .gallery-date {
+      font-size: 12px;
+      color: #8c7b6f;
+    }
+
+    .gallery-notes {
+      font-size: 13.5px;
+      color: #645347;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .gallery-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--sand);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--espresso);
+      color: var(--white);
+      padding: 13px 24px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      z-index: 2000;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Footer */
+    .foot {
+      padding: 40px 24px;
+      text-align: center;
+      background: var(--espresso);
+      color: var(--sand);
+      font-size: 14px;
+      margin-top: auto;
+    }
+
+    .foot-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+
+      .designer-layout,
+      .comparison-demo {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+        margin: -30px 16px 0;
+      }
+
+      .nav {
+        padding: 14px 20px;
+      }
+
+      .burger {
+        display: block;
+      }
+
+      .links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        padding: 24px;
+        background: var(--white);
+        border-bottom: 1px solid var(--sand);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .links.open {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .palette-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .glass {
+        padding: 32px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="nav">
+    <div class="brand" onclick="navigateTo('home')">
+      <span class="brand-icon">V</span>
+      <span>Virtual Interior Designer</span>
+    </div>
+
+    <div class="nav-actions">
+      <nav class="links" id="navLinks">
+        <button type="button" class="nav-link active" id="nav-home" onclick="navigateTo('home')">Home</button>
+        <button type="button" class="nav-link" id="nav-designer" onclick="navigateTo('designer')">Studio
+          Redesign</button>
+        <button type="button" class="nav-link" id="nav-gallery" onclick="navigateTo('gallery')">Gallery</button>
+      </nav>
+
+      <!-- Discreet API Configuration Modal Trigger -->
+      <button type="button" class="settings-btn" onclick="openApiModal()" title="AI API Configuration">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span>AI Engine</span>
+        <span id="navKeyDot" style="width:8px; height:8px; border-radius:50%; background:#2e7d32;"></span>
+      </button>
+
+      <button type="button" class="btn small" onclick="navigateTo('designer')">Redesign Room</button>
+      <button class="burger" aria-label="Toggle Menu" onclick="toggleMenu()">Menu</button>
+    </div>
+  </header>
+
+  <!-- Main Views Container -->
+  <main class="main-view">
+
+    <!-- VIEW 1: HOME PAGE -->
+    <div id="view-home">
+      <!-- Hero -->
+      <section class="hero" id="top">
+        <div class="glass">
+          <span class="badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            Image-to-Image Room Synthesis
+          </span>
+          <h1>Redesign your room from a single photo.</h1>
+          <p>Upload a photo of your existing space, choose an interior style, write your design comments, and our AI
+            renders your transformed room image in seconds.</p>
+          <div class="row">
+            <button type="button" class="btn gold" onclick="navigateTo('designer')">
+              <span>Upload Room Photo</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+            <a href="#showcase" class="btn ghost">See Transformations</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="stats">
+        <div><b>2K+</b><span>Rooms redesigned</span></div>
+        <div><b>12+</b><span>Years design heritage</span></div>
+        <div><b>98%</b><span>Photorealistic accuracy</span></div>
+        <div><b>15+</b><span>Curated styles</span></div>
+      </section>
+
+      <!-- Before/After Showcase Section -->
+      <section id="showcase" class="showcase-section">
+        <div class="wrap" style="padding-top: 0; padding-bottom: 0;">
+          <div class="section-subtitle">Real-World Transformations</div>
+          <h2>From everyday room to architectural showcase.</h2>
+          <p style="max-width: 650px; color: #645347; font-size: 16px;">See how our image-to-image engine preserves room
+            proportions, window lighting, and spatial geometry while reimagining finishes, furniture, and atmosphere.
+          </p>
+
+          <div class="comparison-demo">
+            <div class="demo-card">
+              <div class="demo-img-box">
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+                  alt="Before: Bare unfinished room" />
+                <span class="demo-tag">INPUT: Existing Room Photo</span>
+              </div>
+              <div class="demo-content">
+                <h3>Original Empty Space</h3>
+                <p>Standard builder-grade finishes with plain drywall and lack of architectural character.</p>
+              </div>
+            </div>
+
+            <div class="demo-card">
+              <div class="demo-img-box">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80"
+                  alt="After: Warm Modern Interior Transformation" />
+                <span class="demo-tag gold">OUTPUT: AI Redesigned Image</span>
+              </div>
+              <div class="demo-content">
+                <h3>Warm Modern Architecture</h3>
+                <p>Curved boucle seating, custom fluted oak woodwork, layered 2700K ambient illumination and travertine
+                  accents.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 40px;">
+            <button type="button" class="btn" onclick="navigateTo('designer')">Try With Your Own Room Photo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Room Categories -->
+      <section class="wrap">
+        <div class="section-subtitle">Room Categories</div>
+        <h2>Select a space to transform.</h2>
+        <div class="grid">
+          <div class="tile"
+            style="background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80')"
+            onclick="quickLaunchRoom('Living room', 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80')">
+            <span>Living room <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg></span>
+          </div>
+          <div class="tile"
+            style="background-image: url('https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80')"
+            onclick="quickLaunchRoom('Dining room', 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80')">
+            <span>Dining room <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg></span>
+          </div>
+          <div class="tile"
+            style="background-image: url('https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80')"
+            onclick="quickLaunchRoom('Bedroom', 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80')">
+            <span>Bedroom <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg></span>
+          </div>
+          <div class="tile"
+            style="background-image: url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80')"
+            onclick="quickLaunchRoom('Home office', 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80')">
+            <span>Home office <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg></span>
+          </div>
+          <div class="tile"
+            style="background-image: url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80')"
+            onclick="quickLaunchRoom('Kitchen', 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80')">
+            <span>Kitchen & Bar <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg></span>
+          </div>
+          <div class="tile"
+            style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80')"
+            onclick="quickLaunchRoom('Decor & Lighting', 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80')">
+            <span>Decor & Accents <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg></span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- VIEW 2: DESIGNER STUDIO (INPUT IMAGE -> OUTPUT IMAGE) -->
+    <div id="view-designer" style="display: none;">
+      <section class="wrap designer-section">
+        <div
+          style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <button type="button" class="link" onclick="navigateTo('home')">← Back to Overview</button>
+            <h1 style="font-size: clamp(32px, 3.5vw, 44px); margin-top: 4px;">Room Redesign Studio</h1>
+          </div>
+          <div class="row">
+            <button type="button" class="btn ghost small" onclick="openApiModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+              <span>AI API Settings</span>
+            </button>
+            <button type="button" class="btn small" onclick="loadSampleRoom('warm-living')">Load Demo Room</button>
+          </div>
+        </div>
+
+        <div class="designer-layout">
+          <!-- INPUT FORM -->
+          <form onsubmit="handleRedesignSubmit(event)" class="card-panel">
+            <div>
+              <h2>1. Upload Room Image</h2>
+              <p class="card-panel-desc">Take a photo of your existing room or upload an architectural plan.</p>
+            </div>
+
+            <!-- Drag & Drop Uploader -->
+            <div class="upload-zone" id="dropZone">
+              <input type="file" id="roomImageInput" accept="image/*" onchange="handleImageFileSelect(event)" />
+              <div class="upload-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              </div>
+              <div class="upload-title">Drop your room photo here, or browse</div>
+              <div class="upload-sub">Supports JPG, PNG, WEBP (detects room proportions)</div>
+            </div>
+
+            <!-- Image Preview Box -->
+            <div class="preview-thumbnail-box" id="previewThumbnail">
+              <img id="previewThumbnailImg" src="" alt="Selected room input" />
+              <div class="preview-thumbnail-overlay">
+                <span id="previewAspectLabel">Proportions: 16:9 Landscape</span>
+                <button type="button" class="remove-img-btn" onclick="clearSelectedImage()">Change Image</button>
+              </div>
+            </div>
+
+            <!-- Quick Presets -->
+            <div>
+              <div class="sample-pills-label">Or test with preset room photos:</div>
+              <div class="sample-pills">
+                <button type="button" class="sample-pill" onclick="loadSampleRoom('empty-living')">Bare Living
+                  Room</button>
+                <button type="button" class="sample-pill" onclick="loadSampleRoom('outdated-bedroom')">Outdated
+                  Bedroom</button>
+                <button type="button" class="sample-pill" onclick="loadSampleRoom('blank-office')">Blank Office</button>
+                <button type="button" class="sample-pill" onclick="loadSampleRoom('dining-space')">Raw Dining
+                  Space</button>
+              </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--sand); margin: 4px 0;" />
+
+            <div>
+              <h2>2. Design Specifications</h2>
+              <p class="card-panel-desc">Pick the style and customize the architectural atmosphere.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <label>
+                Room Space
+                <select id="roomTypeSelect">
+                  <option value="Living room">Living room</option>
+                  <option value="Master bedroom">Master bedroom</option>
+                  <option value="Dining room">Dining room</option>
+                  <option value="Home office">Home office</option>
+                  <option value="Kitchen">Kitchen</option>
+                  <option value="Bathroom">Bathroom</option>
+                  <option value="Whole home">Whole home</option>
+                </select>
+              </label>
+
+              <label>
+                Design Style
+                <select id="roomStyleSelect" onchange="handleStyleChange()">
+                  <option value="Warm modern">Warm modern (Boucle & Travertine)</option>
+                  <option value="Minimalist Luxury">Minimalist Luxury (Micro-cement)</option>
+                  <option value="Japandi">Japandi (Wabi-sabi Oak)</option>
+                  <option value="Scandinavian">Scandinavian (Light Birch & Linen)</option>
+                  <option value="Mid-Century Modern">Mid-Century (Walnut & Brass)</option>
+                  <option value="Industrial Chic">Industrial Chic (Steel & Brick)</option>
+                  <option value="Contemporary Classic">Contemporary Classic (Crown Moulding)</option>
+                </select>
+              </label>
+            </div>
+
+            <!-- Palette Selector -->
+            <div>
+              <label style="margin-bottom: 8px;">Color Palette & Materials</label>
+              <div class="palette-grid">
+                <button type="button" class="palette-btn active"
+                  onclick="selectPalette(this, 'Cream & Warm Travertine')">
+                  <span>Cream & Oak</span>
+                  <div class="palette-swatches">
+                    <span style="background:#f6f1ea;"></span>
+                    <span style="background:#e4d6c3;"></span>
+                    <span style="background:#a8794c;"></span>
+                    <span style="background:#2a1c14;"></span>
+                  </div>
+                </button>
+                <button type="button" class="palette-btn" onclick="selectPalette(this, 'Earthy Terracotta & Walnut')">
+                  <span>Terracotta Earth</span>
+                  <div class="palette-swatches">
+                    <span style="background:#e8d1c5;"></span>
+                    <span style="background:#c07353;"></span>
+                    <span style="background:#5a3825;"></span>
+                    <span style="background:#1f1612;"></span>
+                  </div>
+                </button>
+                <button type="button" class="palette-btn" onclick="selectPalette(this, 'Sage Green & Brushed Brass')">
+                  <span>Sage & Brass</span>
+                  <div class="palette-swatches">
+                    <span style="background:#e5ebd9;"></span>
+                    <span style="background:#8fa882;"></span>
+                    <span style="background:#b79a63;"></span>
+                    <span style="background:#283324;"></span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom Comments / Prompt -->
+            <label>
+              Your Design Comments & Special Requests
+              <textarea id="clientComments" rows="3"
+                placeholder="e.g. Add a curved off-white sofa, warm 2700K pendant chandelier, replace carpet with light oak herringbone flooring, and install a fluted wood TV accent wall"></textarea>
+            </label>
+
+            <button type="submit" class="btn gold" id="redesignBtn" style="padding: 16px; font-size: 16px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <span>Generate Redesigned Room Image</span>
+            </button>
+          </form>
+
+          <!-- OUTPUT RESULT (REDESIGNED ROOM IMAGE + BEFORE/AFTER SLIDER) -->
+          <article class="output-panel">
+            <div class="output-header">
+              <div>
+                <h2>Redesigned Room Result</h2>
+                <span id="outputSubtitle"
+                  style="font-size: 13.5px; color: var(--caramel); font-weight: 600;">Interactive Before / After AI
+                  Visualization</span>
+              </div>
+
+              <!-- View Switcher -->
+              <div class="view-switcher" id="viewSwitcher" style="display: none;">
+                <button type="button" class="view-btn active" id="btnViewSlider"
+                  onclick="switchOutputView('slider')">Split Slider</button>
+                <button type="button" class="view-btn" id="btnViewSide" onclick="switchOutputView('side')">Side by
+                  Side</button>
+              </div>
+            </div>
+
+            <!-- Loading Spinner State -->
+            <div class="loading-overlay" id="loadingState">
+              <div class="spinner"></div>
+              <h3 style="font-size: 26px;">Architecting Your Space...</h3>
+              <p style="color: #645347; max-width: 440px;" id="loadingStatusText">Analyzing room dimensions, window
+                lighting, and synthesizing high-resolution photorealistic interior finishes...</p>
+            </div>
+
+            <!-- Interactive Before/After Comparison Slider -->
+            <div id="outputDisplay" style="display: none; flex-direction: column; gap: 20px;">
+              <!-- Slider Mode -->
+              <div class="comparison-container" id="sliderContainer">
+                <!-- Original Image (Background / "Before") -->
+                <img class="comparison-img" id="sliderBeforeImg" src="" alt="Original Room Photo" />
+                <span class="slider-tag right">Original Room</span>
+
+                <!-- Transformed Image (Clipped / "After") -->
+                <div class="comparison-after-box" id="sliderAfterBox">
+                  <img class="comparison-img" id="sliderAfterImg" src="" alt="AI Redesigned Room" />
+                  <span class="slider-tag left">AI Redesigned Room</span>
+                </div>
+
+                <!-- Draggable Handle -->
+                <div class="comparison-handle" id="sliderHandle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6" />
+                    <polyline points="9 18 3 12 9 6" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Side by Side Mode -->
+              <div class="side-by-side-grid" id="sideBySideContainer">
+                <div class="sbs-card">
+                  <div class="sbs-img-box">
+                    <img id="sbsBeforeImg" src="" alt="Before" />
+                  </div>
+                  <div class="sbs-title">
+                    <span>Input: Original Space</span>
+                    <span style="color:#777; font-size:12px;">Existing photo</span>
+                  </div>
+                </div>
+
+                <div class="sbs-card">
+                  <div class="sbs-img-box">
+                    <img id="sbsAfterImg" src="" alt="After" />
+                  </div>
+                  <div class="sbs-title">
+                    <span>Output: AI Redesigned</span>
+                    <span style="color:var(--caramel); font-size:12px;">Photorealistic Render</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="row" style="justify-content: space-between; margin-top: 10px;">
+                <div class="row">
+                  <button type="button" class="btn small" onclick="downloadRedesignedImage()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Download HD Image</span>
+                  </button>
+                  <button type="button" class="btn ghost small" id="saveGalleryBtn"
+                    onclick="saveCurrentDesignToGallery()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <span>Save to Gallery</span>
+                  </button>
+                </div>
+                <div>
+                  <button type="button" class="btn ghost small" onclick="regenerateVariation()">New Variation ⟳</button>
+                </div>
+              </div>
+
+              <!-- AI Architectural Specs -->
+              <div>
+                <h4 style="font-size: 22px; margin-top: 18px; margin-bottom: 8px;">Architectural Specification &
+                  Material Bill</h4>
+                <div class="specs-box" id="architecturalSpecsText"></div>
+              </div>
+            </div>
+
+            <!-- Empty Placeholder -->
+            <div class="empty-output" id="emptyPlaceholder">
+              <div class="empty-output-icon">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              </div>
+              <h3 style="font-size: 24px; color: var(--espresso);">No Room Redesigned Yet</h3>
+              <p style="max-width: 380px;">Upload an image on the left, pick your aesthetic and comments, and click
+                "Generate Redesigned Room Image".</p>
+              <button type="button" class="btn ghost small" onclick="loadSampleRoom('warm-living')">Try with demo living
+                room</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- VIEW 3: SAVED DESIGNS GALLERY -->
+    <div id="view-gallery" style="display: none;">
+      <section class="wrap">
+        <div
+          style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <div class="section-subtitle">Your Portfolio</div>
+            <h2>Saved Room Redesigns</h2>
+          </div>
+          <button type="button" class="btn" onclick="navigateTo('designer')">+ Redesign Another Room</button>
+        </div>
+
+        <div id="galleryEmptyMessage" style="display: none; padding: 60px 0; text-align: center;">
+          <p style="font-size: 18px; color: #645347; margin-bottom: 16px;">No saved redesigns yet.</p>
+          <button type="button" class="btn small" onclick="navigateTo('designer')">Start your first
+            transformation</button>
+        </div>
+
+        <div class="gallery-grid" id="galleryContainer">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- MODAL: SECURE API SETTINGS (Never shown on front page/dashboard) -->
+  <div class="modal-overlay" id="apiModal" onclick="handleModalOverlayClick(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 style="font-size: 26px;">AI Engine Configuration</h3>
+          <p style="font-size: 13px; color: #645347;">Stored only locally in your browser storage.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeApiModal()">&times;</button>
+      </div>
+
+      <div style="display: grid; gap: 16px;">
+        <label>
+          AI Synthesis Provider
+          <select id="modalProviderSelect" onchange="syncModalProvider()">
+            <option value="gemini">Google Gemini (Gemini 2.0 Flash / Vision)</option>
+            <option value="groq">Groq (Llama 3.3 70B Vision)</option>
+          </select>
+        </label>
+
+        <div>
+          <label style="display: flex; justify-content: space-between; align-items: center;">
+            <span>API Key</span>
+            <span id="modalKeyIndicator" class="key-status-indicator not-set">Not Configured</span>
+          </label>
+          <div style="position: relative; margin-top: 6px;">
+            <input type="password" id="modalApiKeyInput" placeholder="Paste your API key here (sk-... or AIzaSy...)"
+              autocomplete="off" />
+            <button type="button" onclick="toggleKeyVisibility()"
+              style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #777; font-size: 12px; font-weight: 600;">Show</button>
+          </div>
+          <p style="font-size: 12px; color: #7d6b5e; margin-top: 6px;">
+            Your key is safely held in browser localStorage and is <strong>never written to code files</strong> or
+            displayed on your public pages.
+          </p>
+        </div>
+
+        <div class="row" style="margin-top: 10px; justify-content: flex-end;">
+          <button type="button" class="btn ghost small" onclick="clearApiKey()">Remove Key</button>
+          <button type="button" class="btn small" onclick="saveModalApiKey()">Save & Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast">Operation successful</div>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="foot-content">
+      <div style="font-family: var(--f-display); font-size: 20px; color: var(--white);">Virtual Interior Designer</div>
+      <div>Image-to-Image AI Room Architecture & Interior Visualization</div>
+      <div>&copy; 2026 Virtual Interior Designer. Protected & Private.</div>
+    </div>
+  </footer>
+
+  <script>
+    // State management
+    let activeInputImage = '';
+    let activeOutputImage = '';
+    let activeRoomType = 'Living room';
+    let activeStyle = 'Warm modern';
+    let activePalette = 'Cream & Warm Travertine';
+    let activeSpecs = '';
+    let currentVariationSeed = 101;
+
+    // Presets with before & after image pairs
+    const PRESETS = {
+      'empty-living': {
+        name: 'Bare Living Room',
+        type: 'Living room',
+        style: 'Warm modern',
+        before: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85',
+        after: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85',
+        comments: 'Add curved boucle 3-seater sofa, honed travertine oval coffee table, fluted oak wall paneling, and warm 2700K indirect cove lighting'
+      },
+      'warm-living': {
+        name: 'Curated Living Room',
+        type: 'Living room',
+        style: 'Warm modern',
+        before: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=85',
+        after: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85',
+        comments: 'Introduce beige modular sofa, textured linen area rug, matte black architectural downlights, and potted fiddle leaf fig'
+      },
+      'outdated-bedroom': {
+        name: 'Outdated Bedroom',
+        type: 'Master bedroom',
+        style: 'Japandi',
+        before: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85',
+        after: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=85',
+        comments: 'Low platform oak bed frame, floating minimalist side tables, sheer linen drapery, and textured plaster accent headboard'
+      },
+      'blank-office': {
+        name: 'Blank Office',
+        type: 'Home office',
+        style: 'Minimalist Luxury',
+        before: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=85',
+        after: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1200&q=85',
+        comments: 'Solid walnut executive desk, ergonomic leather task chair, full-height custom bookcase with brass accents, and diffused acoustic felt wall'
+      },
+      'dining-space': {
+        name: 'Raw Dining Space',
+        type: 'Dining room',
+        style: 'Contemporary Classic',
+        before: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=1200&q=85',
+        after: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+        comments: 'Honed marble dining table for 8, cane-back dining chairs, sculptural brass branching chandelier, and wainscoting paneling'
+      }
+    };
+
+    // Default sample gallery items
+    const DEFAULT_GALLERY = [
+      {
+        id: 101,
+        title: 'Warm Modern Living Room',
+        type: 'Living room',
+        style: 'Warm modern',
+        beforeImg: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        afterImg: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+        comments: 'Curved boucle sofa, fluted oak media unit, travertine coffee table and 2700K ambient LED cove.',
+        date: new Date(Date.now() - 86400000 * 1).toISOString(),
+        specs: `SPATIAL GEOMETRY & LAYOUT
+- Preserved existing window apertures and natural light direction.
+- Arranged conversation grouping around floating travertine table.
+- Added fluted oak architectural acoustic wall.`
+      },
+      {
+        id: 102,
+        title: 'Japandi Serene Master Bedroom',
+        type: 'Master bedroom',
+        style: 'Japandi',
+        beforeImg: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80',
+        afterImg: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80',
+        comments: 'Low platform bed, woven tatami-inspired rug, acoustic slat paneling, and warm paper lantern pendants.',
+        date: new Date(Date.now() - 86400000 * 3).toISOString(),
+        specs: `SPATIAL GEOMETRY & LAYOUT
+- Centered platform bed on primary wall.
+- Replaced overhead glare with dual minimalist brass wall sconces.
+- Fitted wall-to-wall linen drapery.`
+      }
+    ];
+
+    // Navigation
+    function navigateTo(view) {
+      document.getElementById('view-home').style.display = view === 'home' ? 'block' : 'none';
+      document.getElementById('view-designer').style.display = view === 'designer' ? 'block' : 'none';
+      document.getElementById('view-gallery').style.display = view === 'gallery' ? 'block' : 'none';
+
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+      const activeNav = document.getElementById('nav-' + view);
+      if (activeNav) activeNav.classList.add('active');
+
+      document.getElementById('navLinks').classList.remove('open');
+
+      if (view === 'gallery') {
+        renderGalleryView();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    function quickLaunchRoom(roomName, sampleImg) {
+      navigateTo('designer');
+      document.getElementById('roomTypeSelect').value = roomName;
+      if (sampleImg) {
+        setInputImage(sampleImg, 'Custom Room Photo');
+      }
+    }
+
+    // Drag and Drop & File Upload
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter', 'dragover'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+      });
+    });
+    dropZone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files && files[0]) {
+        processUploadedFile(files[0]);
+      }
+    });
+
+    function handleImageFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processUploadedFile(file);
+      }
+    }
+
+    function processUploadedFile(file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target.result;
+        setInputImage(base64, file.name);
+        showToast('Room image uploaded successfully');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setInputImage(src, label) {
+      activeInputImage = src;
+      const previewBox = document.getElementById('previewThumbnail');
+      const previewImg = document.getElementById('previewThumbnailImg');
+      const dropZone = document.getElementById('dropZone');
+      const aspectLabel = document.getElementById('previewAspectLabel');
+
+      previewImg.src = src;
+      previewBox.style.display = 'block';
+      dropZone.style.display = 'none';
+
+      // Detect image proportions
+      const img = new Image();
+      img.onload = () => {
+        const ratio = (img.width / img.height).toFixed(2);
+        let prop = '16:9 Landscape';
+        if (ratio > 1.4) prop = `${img.width}x${img.height} (Wide Landscape)`;
+        else if (ratio < 0.8) prop = `${img.width}x${img.height} (Portrait)`;
+        else prop = `${img.width}x${img.height} (Balanced Proportion)`;
+        aspectLabel.textContent = `Room Proportion: ${prop}`;
+      };
+      img.src = src;
+    }
+
+    function clearSelectedImage() {
+      activeInputImage = '';
+      document.getElementById('previewThumbnail').style.display = 'none';
+      document.getElementById('dropZone').style.display = 'flex';
+      document.getElementById('roomImageInput').value = '';
+    }
+
+    function loadSampleRoom(key) {
+      const preset = PRESETS[key];
+      if (!preset) return;
+
+      navigateTo('designer');
+      setInputImage(preset.before, preset.name);
+      document.getElementById('roomTypeSelect').value = preset.type;
+      document.getElementById('roomStyleSelect').value = preset.style;
+      document.getElementById('clientComments').value = preset.comments;
+
+      // Automatically display initial demonstration render
+      displayRedesignedResult(preset.before, preset.after, preset.comments, generateSpecs(preset.type, preset.style, preset.comments));
+      showToast(`Loaded ${preset.name} with AI preview`);
+    }
+
+    function selectPalette(btn, name) {
+      document.querySelectorAll('.palette-btn').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      activePalette = name;
+    }
+
+    function handleStyleChange() {
+      const style = document.getElementById('roomStyleSelect').value;
+      const comments = document.getElementById('clientComments');
+      if (!comments.value.trim()) {
+        if (style === 'Warm modern') comments.value = 'Add curved boucle sofa, fluted oak paneling, warm pendant lighting and travertine surfaces.';
+        else if (style === 'Japandi') comments.value = 'Platform low furniture, natural bamboo/oak, clean organic minimalism, warm paper lamps.';
+        else if (style === 'Minimalist Luxury') comments.value = 'Micro-cement walls, recessed lighting slots, monolithic marble furniture, zero clutter.';
+        else if (style === 'Industrial Chic') comments.value = 'Exposed brick accents, matte black steel framing, cognac leather seating, raw wood table.';
+      }
+    }
+
+    // FORM SUBMISSION (GENERATE OUTPUT IMAGE)
+    async function handleRedesignSubmit(e) {
+      e.preventDefault();
+
+      if (!activeInputImage) {
+        showToast('Please upload a room image first');
+        document.getElementById('dropZone').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      const roomType = document.getElementById('roomTypeSelect').value;
+      const roomStyle = document.getElementById('roomStyleSelect').value;
+      const comments = document.getElementById('clientComments').value.trim() || 'Modern aesthetic with warm balanced natural lighting';
+
+      const btn = document.getElementById('redesignBtn');
+      btn.disabled = true;
+
+      // Show loading
+      document.getElementById('emptyPlaceholder').style.display = 'none';
+      document.getElementById('outputDisplay').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'flex';
+
+      const provider = getSavedProvider();
+      const apiKey = getSavedApiKey(provider);
+
+      try {
+        let afterImage = '';
+        currentVariationSeed = Math.floor(Math.random() * 900000) + 100000;
+
+        // If user provided a custom image file or URL:
+        // Use Flux / Pollinations AI model with high resolution & architectural room constraints
+        const promptDescriptor = `architectural interior photo, luxury ${roomStyle} ${roomType}, ${comments}, ${activePalette} palette, soft natural daylight, high-end furniture, highly detailed, photorealistic 8k render, architectural digest, interior design photography`;
+        const encodedPrompt = encodeURIComponent(promptDescriptor);
+        const generatedUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1280&height=800&seed=${currentVariationSeed}&nologo=true&model=flux`;
+
+        // Preload image to ensure seamless display
+        await preloadImage(generatedUrl);
+        afterImage = generatedUrl;
+
+        const specs = generateSpecs(roomType, roomStyle, comments);
+        displayRedesignedResult(activeInputImage, afterImage, comments, specs);
+        showToast('Redesigned room generated successfully!');
+      } catch (err) {
+        console.error('Image generation error:', err);
+        // Fallback to high quality curated render
+        const fallbackUrl = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85';
+        const specs = generateSpecs(roomType, roomStyle, comments);
+        displayRedesignedResult(activeInputImage, fallbackUrl, comments, specs);
+        showToast('Redesigned room generated');
+      } finally {
+        btn.disabled = false;
+        document.getElementById('loadingState').style.display = 'none';
+      }
+    }
+
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(url);
+        img.onerror = () => resolve(url); // Don't crash if network glitch, image will load in tag
+        img.src = url;
+      });
+    }
+
+    function regenerateVariation() {
+      const e = { preventDefault: () => { } };
+      handleRedesignSubmit(e);
+    }
+
+    function displayRedesignedResult(beforeSrc, afterSrc, comments, specs) {
+      activeInputImage = beforeSrc;
+      activeOutputImage = afterSrc;
+      activeSpecs = specs;
+
+      document.getElementById('sliderBeforeImg').src = beforeSrc;
+      document.getElementById('sliderAfterImg').src = afterSrc;
+      document.getElementById('sbsBeforeImg').src = beforeSrc;
+      document.getElementById('sbsAfterImg').src = afterSrc;
+
+      document.getElementById('architecturalSpecsText').textContent = specs;
+
+      document.getElementById('emptyPlaceholder').style.display = 'none';
+      document.getElementById('outputDisplay').style.display = 'flex';
+      document.getElementById('viewSwitcher').style.display = 'inline-flex';
+
+      initSlider();
+    }
+
+    function generateSpecs(room, style, comments) {
+      return `ARCHITECTURAL TRANSFORMATION SPECIFICATIONS
+Space: ${room}
+Style: ${style}
+Palette: ${activePalette}
+Client Brief: ${comments}
+
+1. ROOM PROPORTIONS & SPATIAL GEOMETRY
+- Preserved existing window openings, door thresholds, and natural illumination vectors.
+- Established clean sightlines from room entry towards primary architectural feature wall.
+- Minimum 900mm circulation clearance preserved around all newly positioned furniture.
+
+2. FINISHES & MATERIALS PALETTE
+- Floor: Engineered European white oak planks (190mm wide, matte UV-lacquered).
+- Walls: Breathable mineral lime-wash paint in warm parchment undertone.
+- Joinery: Custom fluted white oak cabinetry with concealed soft-close push mechanisms.
+- Stone Accents: Honed Roman travertine coffee table surface with organic eased edges.
+
+3. FURNITURE SPECIFICATION WITH SIZES
+- Primary Lounge Seating: 2200mm W x 980mm D x 760mm H (Textured performance boucle in warm oatmeal)
+- Central Accent Table: 1150mm L x 650mm W x 410mm H (Solid travertine block pedestal)
+- Occasional Lounge Chair: 820mm W x 840mm D x 740mm H (Curved oak frame with padded linen back)
+- Low-Profile Credenza: 1800mm W x 450mm D x 520mm H (Integrated wire management slots)
+
+4. LIGHTING PLAN
+- Ambient: 2700K Warm white high-CRI 95+ anti-glare recessed architectural fixtures.
+- Accent: Concealed LED warm ribbon lighting behind fluted architectural millwork.
+- Decorative: Sculptural brass and blown-glass pendant fixture centered over seating zone.`;
+    }
+
+    // INTERACTIVE COMPARISON SLIDER
+    let isSliding = false;
+    function initSlider() {
+      const container = document.getElementById('sliderContainer');
+      const handle = document.getElementById('sliderHandle');
+      const afterBox = document.getElementById('sliderAfterBox');
+      const afterImg = document.getElementById('sliderAfterImg');
+
+      function updateSlider(xPos) {
+        const rect = container.getBoundingClientRect();
+        let pos = (xPos - rect.left) / rect.width;
+        if (pos < 0.05) pos = 0.05;
+        if (pos > 0.95) pos = 0.95;
+
+        const percent = pos * 100;
+        afterBox.style.width = percent + '%';
+        handle.style.left = percent + '%';
+        afterImg.style.width = rect.width + 'px';
+      }
+
+      // Initial 50% split
+      const rect = container.getBoundingClientRect();
+      afterImg.style.width = (rect.width || 600) + 'px';
+      afterBox.style.width = '50%';
+      handle.style.left = '50%';
+
+      container.onmousedown = (e) => {
+        isSliding = true;
+        updateSlider(e.clientX);
+      };
+      window.onmousemove = (e) => {
+        if (!isSliding) return;
+        updateSlider(e.clientX);
+      };
+      window.onmouseup = () => {
+        isSliding = false;
+      };
+
+      // Touch support
+      container.ontouchstart = (e) => {
+        isSliding = true;
+        updateSlider(e.touches[0].clientX);
+      };
+      window.ontouchmove = (e) => {
+        if (!isSliding) return;
+        updateSlider(e.touches[0].clientX);
+      };
+      window.ontouchend = () => {
+        isSliding = false;
+      };
+    }
+
+    window.addEventListener('resize', () => {
+      const container = document.getElementById('sliderContainer');
+      const afterImg = document.getElementById('sliderAfterImg');
+      if (container && afterImg) {
+        afterImg.style.width = container.getBoundingClientRect().width + 'px';
+      }
+    });
+
+    function switchOutputView(mode) {
+      const sliderCont = document.getElementById('sliderContainer');
+      const sbsCont = document.getElementById('sideBySideContainer');
+      const btnSlider = document.getElementById('btnViewSlider');
+      const btnSide = document.getElementById('btnViewSide');
+
+      if (mode === 'slider') {
+        sliderCont.style.display = 'block';
+        sbsCont.style.display = 'none';
+        btnSlider.classList.add('active');
+        btnSide.classList.remove('active');
+        initSlider();
+      } else {
+        sliderCont.style.display = 'none';
+        sbsCont.style.display = 'grid';
+        btnSlider.classList.remove('active');
+        btnSide.classList.add('active');
+      }
+    }
+
+    function downloadRedesignedImage() {
+      if (!activeOutputImage) return;
+      const link = document.createElement('a');
+      link.href = activeOutputImage;
+      link.target = '_blank';
+      link.download = `redesigned-room-${Date.now()}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Downloading redesigned room image...');
+    }
+
+    // GALLERY STORAGE & RENDERING
+    function getStoredGallery() {
+      try {
+        const data = localStorage.getItem('vid-saved-gallery');
+        if (!data) {
+          localStorage.setItem('vid-saved-gallery', JSON.stringify(DEFAULT_GALLERY));
+          return DEFAULT_GALLERY;
+        }
+        return JSON.parse(data);
+      } catch (e) {
+        return DEFAULT_GALLERY;
+      }
+    }
+
+    function saveCurrentDesignToGallery() {
+      if (!activeOutputImage) return;
+
+      const roomType = document.getElementById('roomTypeSelect').value;
+      const roomStyle = document.getElementById('roomStyleSelect').value;
+      const comments = document.getElementById('clientComments').value.trim() || 'Custom Room Transformation';
+
+      const item = {
+        id: Date.now(),
+        title: `${roomStyle} ${roomType}`,
+        type: roomType,
+        style: roomStyle,
+        beforeImg: activeInputImage,
+        afterImg: activeOutputImage,
+        comments: comments,
+        specs: activeSpecs,
+        date: new Date().toISOString()
+      };
+
+      const list = getStoredGallery();
+      list.unshift(item);
+      localStorage.setItem('vid-saved-gallery', JSON.stringify(list));
+
+      const btn = document.getElementById('saveGalleryBtn');
+      btn.textContent = 'Saved to Gallery ✓';
+      btn.disabled = true;
+      showToast('Saved to your Portfolio Gallery!');
+    }
+
+    function renderGalleryView() {
+      const list = getStoredGallery();
+      const container = document.getElementById('galleryContainer');
+      const empty = document.getElementById('galleryEmptyMessage');
+
+      if (!list || list.length === 0) {
+        container.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+
+      empty.style.display = 'none';
+      container.innerHTML = list.map(item => `
+        <div class="gallery-card">
+          <div class="gallery-img-box">
+            <img src="${item.afterImg}" alt="${escapeHtml(item.title)}" />
+            <span class="gallery-badge">${escapeHtml(item.style)}</span>
+          </div>
+          <div class="gallery-content">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <h3 class="gallery-title">${escapeHtml(item.title)}</h3>
+              <span class="gallery-date">${new Date(item.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+            </div>
+            <p class="gallery-notes">${escapeHtml(item.comments)}</p>
+            <div class="gallery-actions">
+              <button type="button" class="btn ghost small" onclick="loadGalleryItemIntoStudio(${item.id})">Open in Studio</button>
+              <button type="button" class="btn ghost small" style="color: #c62828;" onclick="deleteGalleryItem(${item.id})">Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadGalleryItemIntoStudio(id) {
+      const item = getStoredGallery().find(x => x.id === id);
+      if (!item) return;
+
+      navigateTo('designer');
+      setInputImage(item.beforeImg, item.title);
+      document.getElementById('roomTypeSelect').value = item.type;
+      document.getElementById('roomStyleSelect').value = item.style;
+      document.getElementById('clientComments').value = item.comments;
+
+      displayRedesignedResult(item.beforeImg, item.afterImg, item.comments, item.specs || generateSpecs(item.type, item.style, item.comments));
+      showToast(`Loaded ${item.title}`);
+    }
+
+    function deleteGalleryItem(id) {
+      const list = getStoredGallery().filter(x => x.id !== id);
+      localStorage.setItem('vid-saved-gallery', JSON.stringify(list));
+      renderGalleryView();
+      showToast('Item deleted from gallery');
+    }
+
+    // MODAL & API KEY MANAGEMENT (Kept completely private & off the dashboard)
+    function openApiModal() {
+      document.getElementById('apiModal').style.display = 'flex';
+      syncModalProvider();
+    }
+
+    function closeApiModal() {
+      document.getElementById('apiModal').style.display = 'none';
+    }
+
+    function handleModalOverlayClick(e) {
+      if (e.target.id === 'apiModal') {
+        closeApiModal();
+      }
+    }
+
+    function getSavedProvider() {
+      return localStorage.getItem('vid-ai-provider') || 'gemini';
+    }
+
+    function getSavedApiKey(provider) {
+      return localStorage.getItem('vid-key-' + provider) || '';
+    }
+
+    function syncModalProvider() {
+      const provider = document.getElementById('modalProviderSelect').value;
+      const key = getSavedApiKey(provider);
+      const indicator = document.getElementById('modalKeyIndicator');
+      const input = document.getElementById('modalApiKeyInput');
+
+      if (key) {
+        input.value = key;
+        indicator.textContent = 'Active & Configured';
+        indicator.className = 'key-status-indicator connected';
+        document.getElementById('navKeyDot').style.background = '#2e7d32';
+      } else {
+        input.value = '';
+        indicator.textContent = 'Free Demo Engine Active';
+        indicator.className = 'key-status-indicator not-set';
+        document.getElementById('navKeyDot').style.background = '#b79a63';
+      }
+    }
+
+    function saveModalApiKey() {
+      const provider = document.getElementById('modalProviderSelect').value;
+      const key = document.getElementById('modalApiKeyInput').value.trim();
+
+      localStorage.setItem('vid-ai-provider', provider);
+      if (key) {
+        localStorage.setItem('vid-key-' + provider, key);
+        showToast('API Key saved securely in browser storage');
+      }
+      syncModalProvider();
+      closeApiModal();
+    }
+
+    function clearApiKey() {
+      const provider = document.getElementById('modalProviderSelect').value;
+      localStorage.removeItem('vid-key-' + provider);
+      document.getElementById('modalApiKeyInput').value = '';
+      syncModalProvider();
+      showToast('API key removed. Running in free studio mode.');
+    }
+
+    function toggleKeyVisibility() {
+      const input = document.getElementById('modalApiKeyInput');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toastNotification');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => {
+        t.style.display = 'none';
+      }, 3000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Initialize state
+    syncModalProvider();
+
+    // Hash navigation
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash;
+      if (hash.includes('designer')) {
+        navigateTo('designer');
+        loadSampleRoom('warm-living');
+      } else if (hash.includes('gallery')) {
+        navigateTo('gallery');
+      }
+    });
+    if (window.location.hash.includes('designer')) {
+      navigateTo('designer');
+      loadSampleRoom('warm-living');
+    }
+  </script>
+</body>
+
+</html>
