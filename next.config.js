@@ -1,2 +1,9 @@
-const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
-module.exports = { output: 'export', basePath: base, assetPrefix: base || undefined, trailingSlash: true, images: { unoptimized: true } };
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+    ],
+  },
+};
+
+module.exports = nextConfig;
